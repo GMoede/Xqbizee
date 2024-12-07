@@ -57,7 +57,7 @@ void loop() {
   //theaterChase(strip.Color(  0,   0, 127), 20); // Blue, half brightness
 
   letterXRainbow(1);             // Flowing rainbow cycle along the whole strip
-  //theaterChaseRainbow(50); // Rainbow-enhanced theaterChase variant
+  theaterChaseRainbow(50); // Rainbow-enhanced theaterChase variant
 }
 
 
