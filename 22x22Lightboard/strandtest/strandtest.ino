@@ -9,7 +9,7 @@
 // - When using a 3.3V microcontroller with a 5V-powered NeoPixel strip,
 //   a LOGIC-LEVEL CONVERTER on the data line is STRONGLY RECOMMENDED.
 // (Skipping these may work OK on your workbench but can fail in the field)
-
+#include <utility>
 #include <Adafruit_NeoPixel.h>
 #ifdef __AVR__
  #include <avr/power.h> // Required for 16 MHz Adafruit Trinket
@@ -21,6 +21,14 @@
 
 // How many NeoPixels are attached to the Arduino?
 #define LED_COUNT 484
+
+// std::pair<int, int> intCoordinates(5, 3);
+// std::cout << "x: " << intCoordinates.first;
+// std::cout << "y: " << intCoordinates.second << "\n";
+
+// // -- hocus pocus, array of pairs, use it as normal C array
+// std::pair<int, int> arr[5];
+
 
 // Declare our NeoPixel strip object:
 Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
@@ -39,7 +47,7 @@ Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 void setup() {
   strip.begin();           // INITIALIZE NeoPixel strip object (REQUIRED)
   strip.show();            // Turn OFF all pixels ASAP
-  strip.setBrightness(1); // Set BRIGHTNESS to about 1/5 (max = 255)
+  strip.setBrightness(2); // Set BRIGHTNESS to about 1/5 (max = 255)
 }
 
 
@@ -75,7 +83,7 @@ void letterXRainbow(int wait){
     strip.rainbow(firstPixelHue);
     // Above line is equivalent to:
     // strip.rainbow(firstPixelHue, 1, 255, 255, true);
-    strip.setPixelColor(0, strip.Color(0,   0,   0));
+    strip.setPixelColor(0, strip.Color(50,   50,   50));
     strip.show(); // Update strip with new contents
     delay(wait);  // Pause for a moment
   }
