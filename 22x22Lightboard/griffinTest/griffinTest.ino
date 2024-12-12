@@ -13,6 +13,7 @@
 #include <Adafruit_NeoPixel.h>
 #include <vector>
 #include <sstream>
+#include <chrono>
 #ifdef __AVR__
  #include <avr/power.h> // Required for 16 MHz Adafruit Trinket
 #endif
@@ -27,25 +28,22 @@ Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 std::vector<std::pair<int, int>> convertVectorOfStringsToCoordinatePairs(std::vector<std::string> strings);
 void smallDisplayTest(int loopCount);
 int translateCoordinatesToPixelNumber(std::pair<int, int> coordinates);
+int translate(std::pair<int, int> coordinates);
 std::vector<std::string> getLetterX();
 std::vector<std::pair<int, int>> shiftListOfCoordinates(std::vector<std::pair<int, int>> listOfCoordinates, int loopCount);
 
 void setup() {
+  Serial.begin(9600);
   strip.begin();           // INITIALIZE NeoPixel strip object (REQUIRED)
   strip.show();            // Turn OFF all pixels ASAP
-  strip.setBrightness(4); // Set BRIGHTNESS to about 1/5 (max = 255)
-  Serial.begin(9600);
+  strip.setBrightness(1); // Set BRIGHTNESS to about 1/5 (max = 255)
 }
 
 void loop() {
-
-
   rainbow(5);             // Flowing rainbow cycle along the whole strip
-  //smallDisplayTest();
-  //std::vector<std::pair<int, int>> listOfCoordinates = convertVectorOfStringsToCoordinatePairs(test1);
-  //strip.setPixelColor(1, strip.Color(255, 0, 0));
   strip.show(); // Update strip with new contents
-  //delay(100);
+
+
 }
 
 void smallDisplayTest(int loopCount){
@@ -53,8 +51,6 @@ void smallDisplayTest(int loopCount){
   std::vector<std::pair<int, int>> listOfCoordinates = convertVectorOfStringsToCoordinatePairs(letterX);
   std::vector<std::pair<int, int>> shiftedListOfCoordinates = shiftListOfCoordinates(listOfCoordinates, loopCount);
   for(std::pair<int, int> coord : shiftedListOfCoordinates){
-    // Serial.println(coord.first);
-    // Serial.println(coord.second);
     int pixelNumber = translateCoordinatesToPixelNumber(coord);
     strip.setPixelColor(pixelNumber, strip.Color(0, 0, 0));
   }
@@ -86,7 +82,9 @@ std::vector<std::pair<int, int>> crazyMode(std::vector<std::pair<int, int>> list
   return shiftedListOfCoordinates;
 }
 
-int translate(int x, int y){
+int translate(std::pair<int, int> coordinates){
+  int x = coordinates.first;
+  int y = coordinates.second;
   // 22 x 22 grid
   // 1st line goes forwards, 2nd line goes backwards
   if (y%2 != 0) {
@@ -140,34 +138,6 @@ std::vector<std::pair<int, int>> convertVectorOfStringsToCoordinatePairs(std::ve
     int first = std::stoi(firstToken);
     int second = std::stoi(secondToken);
     coordinatePairs.push_back(std::make_pair(first, second));
-
-    // std::stringstream ss(coordinateLine);
-    // ss << coordinateLine;
-
-    // /* Running loop till the end of the stream */
-    // std::string temp;
-    // int found;
-    // bool isFirst = true;
-    // int first;
-    // int second;
-    // while (!ss.eof()) {
-
-    //   /* extracting word by word from stream */
-    //   ss >> temp;
-
-    //   /* Checking the given word is integer or not */
-    //   if (std::stringstream(temp) >> found){
-    //     if (isFirst) {
-    //       isFirst = false;
-    //       first = found;
-    //     } else {
-    //       second = found;
-    //     }
-    //   }
-    //   /* To save from space at the end of string */
-    //   temp = "";
-    // }
-    //coordinatePairs.push_back(std::make_pair(first, second));
   }
 
   return coordinatePairs;
